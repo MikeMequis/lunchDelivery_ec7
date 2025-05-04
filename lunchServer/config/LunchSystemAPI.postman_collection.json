@@ -1,0 +1,164 @@
+{
+	"info": {
+		"_postman_id": "883314af-5384-4ddd-9be6-2e002f38726c",
+		"name": "Lunch System API Copy",
+		"description": "Coleção de testes para a API de controle de lanches escolares.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "34247449"
+	},
+	"item": [
+		{
+			"name": "Criar Aluno",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"studentRA\": \"12345\",\n    \"nome\": \"João da Silva\",\n    \"photoUrl\": \"https://exemplo.com/foto.jpg\"\n}"
+				},
+				"url": "localhost:3000/students"
+			},
+			"response": []
+		},
+		{
+			"name": "Criar Autorização de Lanche",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"studentRA\": \"12345\",\n    \"dataLiberation\": \"2025-05-03\",\n    \"qtdLunches\": 2\n}"
+				},
+				"url": "localhost:3000/authorizations"
+			},
+			"response": []
+		},
+		{
+			"name": "Criar Entrega de Lanche",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"authId\": \"ID_DA_AUTORIZACAO\",\n    \"studentRA\": \"12345\",\n    \"deliveryDate\": \"2025-05-03\"\n}"
+				},
+				"url": "localhost:3000/deliveries"
+			},
+			"response": []
+		},
+		{
+			"name": "Buscar Todos os Alunos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "localhost:3000/students"
+			},
+			"response": []
+		},
+		{
+			"name": "Buscar Entregas por Data",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "localhost:3000/deliveries/date/2025-05-03"
+			},
+			"response": []
+		},
+		{
+			"name": "Buscar Aluno por RA",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "localhost:3000/students/12345"
+			},
+			"response": []
+		},
+		{
+			"name": "Buscar Autorizações por Data",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "localhost:3000/authorizations/date/2025-05-03"
+			},
+			"response": []
+		},
+		{
+			"name": "Buscar Autorização por ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "localhost:3000/authorizations/12345"
+			},
+			"response": []
+		},
+		{
+			"name": "Atualizar Aluno por RA",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nome\": \"João da Silva Alterado\",\n    \"photoUrl\": \"https://exemplo.com/foto-alterada.jpg\"\n}"
+				},
+				"url": "localhost:3000/students/12345"
+			},
+			"response": []
+		},
+		{
+			"name": "Atualizar Autorização de Lanche por ID",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"dataLiberation\": \"2025-05-04\",\n    \"qtdLunches\": 3\n}"
+				},
+				"url": "localhost:3000/authorizations/12345"
+			},
+			"response": []
+		},
+		{
+			"name": "Excluir Aluno por RA",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "localhost:3000/students/12345"
+			},
+			"response": []
+		},
+		{
+			"name": "Excluir Autorização de Lanche por ID",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "localhost:3000/authorizations/12345"
+			},
+			"response": []
+		}
+	]
+}
