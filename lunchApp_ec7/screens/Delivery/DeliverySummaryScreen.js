@@ -7,7 +7,7 @@ import styles from '../styles';
 import { Ionicons } from '@expo/vector-icons';
 import { format } from 'date-fns';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import api from '../../services/api';
+import DeliveryService from '../../services/DeliveryService';
 
 export default function DeliverySummaryScreen({ route, navigation }) {
     const [deliveries, setDeliveries] = useState([]);
@@ -25,19 +25,12 @@ export default function DeliverySummaryScreen({ route, navigation }) {
     const loadData = async () => {
         try {
             setLoading(true);
-            const formattedDate = format(selectedDate, 'yyyy-MM-dd');
-
-            // Load both deliveries and authorizations for comparison
-            const [deliveriesResponse, authorizationsResponse] = await Promise.all([
-                api.get(`/deliveries/date/${formattedDate}`),
-                api.get(`/authorizations/date/${formattedDate}`)
-            ]);
-
-            setDeliveries(deliveriesResponse.data);
-            setAuthorizations(authorizationsResponse.data);
-        } catch (err) {
-            console.error(err);
-            alert('Erro ao carregar dados');
+            const summary = await DeliveryService.getDeliverySummary(selectedDate);
+            setDeliveries(summary.deliveries || []);
+            setAuthorizations(summary.authorizations || []);
+        } catch (error) {
+            console.error(error);
+            alert(error.toString());
         } finally {
             setLoading(false);
         }

@@ -4,8 +4,20 @@ const express = require('express');
 const cors = require('cors');
 const server = express();
 
+// Add request logging middleware
+server.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  console.log('Headers:', req.headers);
+  console.log('Client IP:', req.ip);
+  next();
+});
+
 server.use(express.json());
-server.use(cors());
+server.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Accept']
+}));
 
 const studentRoutes = require('./routes/StudentRoutes');
 const authRoutes = require('./routes/LunchAuthorizationRoutes');
@@ -25,4 +37,26 @@ server.use((req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => console.log(`API rodando em http://localhost:${PORT}`));
+
+// Try to get the network interfaces
+const networkInterfaces = require('os').networkInterfaces();
+console.log('\nAvailable network interfaces:');
+Object.keys(networkInterfaces).forEach((interfaceName) => {
+  networkInterfaces[interfaceName].forEach((interface) => {
+    if (interface.family === 'IPv4') {
+      console.log(`${interfaceName}: ${interface.address}`);
+    }
+  });
+});
+
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`\nAPI rodando nas seguintes URLs:`);
+  console.log(`- Local: http://localhost:${PORT}`);
+  Object.keys(networkInterfaces).forEach((interfaceName) => {
+    networkInterfaces[interfaceName].forEach((interface) => {
+      if (interface.family === 'IPv4') {
+        console.log(`- ${interfaceName}: http://${interface.address}:${PORT}`);
+      }
+    });
+  });
+});

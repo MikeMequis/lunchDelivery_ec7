@@ -47,8 +47,10 @@ class StudentService {
   }
 
   handleError(error) {
-    if (error.response) {
-      return error.response.data.error || 'Erro ao processar solicitação';
+    if (error.response && error.response.data && error.response.data.error) {
+      return error.response.data.error;
+    } else if (error.response) {
+      return 'Erro ao processar solicitação';
     } else if (error.request) {
       return 'Sem resposta do servidor. Verifique sua conexão.';
     } else {

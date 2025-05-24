@@ -1,10 +1,7 @@
 const mongoose = require('mongoose');
 const url = 'mongodb://localhost:27017/lunch_system';
 
-mongoose.connect(url, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
+mongoose.connect(url)
 .then(() => console.log('MongoDB conectado com sucesso!'))
 .catch(err => console.error('Erro ao conectar ao MongoDB:', err));
 

@@ -347,43 +347,48 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         fontSize: 16,
     },
-    photoButton: {
+    photoContainer: {
         alignItems: 'center',
         marginBottom: 20,
+        width: '100%',
     },
-    photoContainer: {
-        width: 150,
-        height: 150,
-        borderRadius: 75,
+    photo: {
+        width: 120,
+        height: 120,
+        borderRadius: 60,
+        marginBottom: 10,
+    },
+    noPhoto: {
         backgroundColor: '#f0f0f0',
         justifyContent: 'center',
         alignItems: 'center',
-        borderWidth: 1,
-        borderColor: '#ddd',
-        overflow: 'hidden',
     },
-    photo: {
-        width: 150,
-        height: 150,
-        borderRadius: 75,
-    },
-    photoPlaceholder: {
+    photoButton: {
+        flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
+        backgroundColor: '#007bff',
+        paddingVertical: 8,
+        paddingHorizontal: 16,
+        borderRadius: 20,
     },
-    photoPlaceholderText: {
-        marginTop: 5,
-        color: '#777',
+    photoButtonText: {
+        color: '#fff',
+        marginLeft: 8,
+        fontSize: 16,
+    },
+    inputGroup: {
+        marginBottom: 15,
     },
     submitButton: {
         backgroundColor: '#007bff',
-        borderRadius: 5,
         padding: 15,
+        borderRadius: 8,
         alignItems: 'center',
+        marginTop: 20,
     },
     submitButtonText: {
         color: '#fff',
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: 'bold',
     },
     dateButton: {

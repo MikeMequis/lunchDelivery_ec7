@@ -1,10 +1,14 @@
 import api from './api';
+import { format } from 'date-fns';
 
 class AuthorizationService {
   // Create a new lunch authorization
   async createAuthorization(data) {
     try {
-      const response = await api.post('/authorizations', data);
+      const response = await api.post('/authorizations', {
+        ...data,
+        dataLiberation: format(data.dataLiberation, 'yyyy-MM-dd')
+      });
       return response.data;
     } catch (error) {
       throw this.handleError(error);
@@ -14,7 +18,7 @@ class AuthorizationService {
   // Get authorizations by date
   async getAuthorizationsByDate(date) {
     try {
-      const formattedDate = date.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+      const formattedDate = format(date, 'yyyy-MM-dd');
       const response = await api.get(`/authorizations/date/${formattedDate}`);
       return response.data;
     } catch (error) {
@@ -35,7 +39,10 @@ class AuthorizationService {
   // Update authorization
   async updateAuthorization(id, data) {
     try {
-      const response = await api.put(`/authorizations/${id}`, data);
+      const response = await api.put(`/authorizations/${id}`, {
+        ...data,
+        dataLiberation: format(data.dataLiberation, 'yyyy-MM-dd')
+      });
       return response.data;
     } catch (error) {
       throw this.handleError(error);
@@ -54,16 +61,34 @@ class AuthorizationService {
 
   // Error handling helper
   handleError(error) {
-    if (error.response) {
-      // The request was made and the server responded with a status code
-      // that falls out of the range of 2xx
-      return error.response.data.error || 'Erro ao processar solicitação';
+    if (error.response && error.response.data && error.response.data.error) {
+      return error.response.data.error;
+    } else if (error.response) {
+      return 'Erro ao processar solicitação';
     } else if (error.request) {
-      // The request was made but no response was received
       return 'Sem resposta do servidor. Verifique sua conexão.';
     } else {
-      // Something happened in setting up the request that triggered an Error
       return 'Erro ao realizar solicitação.';
+    }
+  }
+
+  async getAvailableAuthorizations(date) {
+    try {
+      const formattedDate = format(date, 'yyyy-MM-dd');
+      
+      // Get authorizations for the date
+      const authResponse = await api.get(`/authorizations/date/${formattedDate}`);
+      const authorizations = authResponse.data;
+
+      // Get deliveries for the date to filter out used authorizations
+      const deliveriesResponse = await api.get(`/deliveries/date/${formattedDate}`);
+      const deliveries = deliveriesResponse.data;
+
+      // Filter out authorizations that have already been used
+      const usedAuthIds = deliveries.map(delivery => String(delivery.authId));
+      return authorizations.filter(auth => !usedAuthIds.includes(String(auth._id)));
+    } catch (error) {
+      throw this.handleError(error);
     }
   }
 }

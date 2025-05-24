@@ -9,7 +9,9 @@ import styles from '../styles';
 import { Ionicons } from '@expo/vector-icons';
 import { format } from 'date-fns';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import api from '../../services/api';
+import DeliveryService from '../../services/DeliveryService';
+import StudentService from '../../services/StudentService';
+import AuthorizationService from '../../services/AuthorizationService';
 
 export default function DeliveriesScreen({ navigation }) {
     const [deliveries, setDeliveries] = useState([]);
@@ -56,12 +58,11 @@ export default function DeliveriesScreen({ navigation }) {
     const loadDeliveries = async () => {
         try {
             setLoading(true);
-            const formattedDate = format(selectedDate, 'yyyy-MM-dd');
-            const { data } = await api.get(`/deliveries/date/${formattedDate}`);
+            const data = await DeliveryService.getDeliveriesByDate(selectedDate);
             setDeliveries(data);
-        } catch (err) {
-            console.error(err);
-            Alert.alert('Erro', 'Falha ao carregar entregas');
+        } catch (error) {
+            console.error(error);
+            Alert.alert('Erro', error.toString());
         } finally {
             setLoading(false);
         }
@@ -69,31 +70,27 @@ export default function DeliveriesScreen({ navigation }) {
 
     const loadStudents = async () => {
         try {
-            const { data } = await api.get('/students/');
+            const data = await StudentService.getAllStudents();
             setStudents(data);
-        } catch (err) {
-            console.error(err);
-            Alert.alert('Erro', 'Falha ao carregar alunos');
+        } catch (error) {
+            console.error(error);
+            Alert.alert('Erro', error.toString());
         }
     };
 
     async function loadAuthorizations() {
         try {
-            const formattedDate = format(selectedDate, 'yyyy-MM-dd');
-            const { data } = await api.get(`/authorizations/date/${formattedDate}`);
+            const data = await AuthorizationService.getAuthorizationsByDate(selectedDate);
+            const currentDeliveries = await DeliveryService.getDeliveriesByDate(selectedDate);
 
-            // Carregar também as entregas para a data selecionada
-            const deliveriesResponse = await api.get(`/deliveries/date/${formattedDate}`);
-            const currentDeliveries = deliveriesResponse.data;
-
-            // Filtrar autorizações que já foram utilizadas
+            // Filter authorizations that have already been used
             const usedAuthIds = currentDeliveries.map(delivery => String(delivery.authId));
             const availableAuths = data.filter(auth => !usedAuthIds.includes(String(auth._id)));
 
             setAuthorizations(availableAuths);
-        } catch (err) {
-            console.error(err);
-            Alert.alert('Erro', 'Não foi possível carregar autorizações');
+        } catch (error) {
+            console.error(error);
+            Alert.alert('Erro', error.toString());
         }
     }
 
@@ -113,10 +110,10 @@ export default function DeliveriesScreen({ navigation }) {
             const payload = {
                 studentRA: selectedStudent.studentRA,
                 authId: selectedAuthId,
-                deliveryDate: format(selectedDate, 'yyyy-MM-dd')
+                deliveryDate: selectedDate
             };
 
-            await api.post('/deliveries', payload);
+            await DeliveryService.createDelivery(payload);
             Alert.alert('Sucesso', 'Entrega registrada com sucesso');
             setModalVisible(false);
             setSelectedStudent(null);
@@ -124,13 +121,9 @@ export default function DeliveriesScreen({ navigation }) {
             setSearchQuery('');
             loadDeliveries();
             loadAuthorizations();
-        } catch (err) {
-            console.error(err);
-            if (err.response && err.response.data && err.response.data.error) {
-                Alert.alert('Erro', err.response.data.error);
-            } else {
-                Alert.alert('Erro', 'Falha ao registrar entrega');
-            }
+        } catch (error) {
+            console.error(error);
+            Alert.alert('Erro', error.toString());
         } finally {
             setSubmitting(false);
         }

@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import styles from '../styles';
 import { Ionicons } from '@expo/vector-icons';
-import api from '../../services/api';
+import StudentService from '../../services/StudentService';
 
 export default function StudentsScreen({ navigation }) {
     const [students, setStudents] = useState([]);
@@ -25,11 +25,11 @@ export default function StudentsScreen({ navigation }) {
     const fetchStudents = async () => {
         setLoading(true);
         try {
-            const response = await api.get('/students');
-            setStudents(response.data);
+            const data = await StudentService.getAllStudents();
+            setStudents(data);
         } catch (error) {
             console.error('Error fetching students:', error);
-            Alert.alert('Erro', 'Não foi possível carregar a lista de alunos');
+            Alert.alert('Erro', error);
         } finally {
             setLoading(false);
         }
@@ -46,12 +46,12 @@ export default function StudentsScreen({ navigation }) {
                     style: 'destructive',
                     onPress: async () => {
                         try {
-                            await api.delete(`/students/${studentRA}`);
+                            await StudentService.deleteStudent(studentRA);
                             Alert.alert('Sucesso', 'Aluno excluído com sucesso');
                             fetchStudents();
                         } catch (error) {
                             console.error('Error deleting student:', error);
-                            Alert.alert('Erro', 'Não foi possível excluir o aluno');
+                            Alert.alert('Erro', error);
                         }
                     }
                 }

@@ -42,7 +42,7 @@ lunchDelivery/
   ```
   ./lunchServer/config/LunchSystemAPI.postman_collection.json
   ```
-- Ao criar uma entrega de lanche, **substitua o valor `ID_DE_AUTORIZACAO`** pelo ID real retornado ao criar a autorização correspondente.
+- Ao criar uma entrega de lanche, sua autorização e confirmar a entrega, **substitua o valor `ID_DE_AUTORIZACAO`** pelo ID real retornado ao criar a autorização correspondente.
 
 ### 🔍 Extensão recomendada (opcional)
 
@@ -63,6 +63,8 @@ npm install
 ```bash
 node ./index.js
 ```
+
+O servidor exibirá todas as interfaces de rede disponíveis e seus respectivos endereços IP ao iniciar.
 
 ---
 
@@ -93,13 +95,48 @@ react-native-safe-area-context \
 react-native-screens
 ```
 
-### Configuração da API
+### Configuração da API e Conectividade 🔌
 
-- No arquivo `./lunchApp_ec7/services/api.js`, altere a constante `HOST_IP`:
+#### 1. Identificando o IP correto
+
+Ao iniciar o servidor, ele mostrará todas as interfaces de rede disponíveis. Escolha o IP correto baseado no seu método de conexão:
+
+- **USB Tethering**: Use o IP da interface Ethernet que apareceu após ativar o tethering
+- **Wi-Fi**: Use o IP da interface Wi-Fi (geralmente começa com 192.168)
+- **Rede Local**: Use o IP da interface de rede local
+
+#### 2. Configurando o IP no App
+
+No arquivo `./lunchApp_ec7/services/api.js`, atualize a constante `HOST_IP`:
 
 ```js
-const HOST_IP = 'XXX.XXX.X.XX';
+const HOST_IP = 'SEU_IP_AQUI';  // Ex: '192.168.154.189'
 ```
+
+#### 3. Testando a Conexão
+
+1. Inicie o servidor: `node ./index.js`
+2. Teste o acesso no navegador do celular: `http://SEU_IP_AQUI:3000/students`
+3. Se funcionar no navegador mas não no app, verifique:
+   - Se o Expo está atualizado
+   - Se o dispositivo e o PC estão na mesma rede
+   - Se não há firewall bloqueando a conexão
+
+### Troubleshooting 🔧
+
+1. **Erro "Network Error"**:
+   - Verifique se está usando o IP correto
+   - Confirme se o servidor está rodando
+   - Teste o acesso via navegador do celular
+
+2. **USB Tethering**:
+   - Use o IP da nova interface Ethernet que aparece ao ativar o tethering
+   - Certifique-se que o USB está em modo de transferência de dados
+
+3. **Expo não conecta**:
+   - Atualize o Expo CLI: `npm install -g expo-cli`
+   - Reinstale o Expo Go no dispositivo
+   - Tente usar o modo túnel do Expo
 
 ### Inicialização do app
 

@@ -7,7 +7,8 @@ import styles from '../styles';
 import { Ionicons } from '@expo/vector-icons';
 import { format } from 'date-fns';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import api from '../../services/api';
+import AuthorizationService from '../../services/AuthorizationService';
+import DeliveryService from '../../services/DeliveryService';
 
 export default function AuthorizationScreen({ navigation }) {
     const [authorizations, setAuthorizations] = useState([]);
@@ -28,21 +29,17 @@ export default function AuthorizationScreen({ navigation }) {
     const loadAuthorizations = async () => {
         try {
             setLoading(true);
-            const formattedDate = format(selectedDate, 'yyyy-MM-dd');
-            const { data } = await api.get(`/authorizations/date/${formattedDate}`);
+            const data = await AuthorizationService.getAuthorizationsByDate(selectedDate);
+            const currentDeliveries = await DeliveryService.getDeliveriesByDate(selectedDate);
 
-            // Carregar as entregas para filtrar autorizações já confirmadas
-            const deliveriesResponse = await api.get(`/deliveries/date/${formattedDate}`);
-            const currentDeliveries = deliveriesResponse.data;
-
-            // Filtrar autorizações que já foram utilizadas
+            // Filter authorizations that have already been used
             const usedAuthIds = currentDeliveries.map(delivery => String(delivery.authId));
             const pendingAuths = data.filter(auth => !usedAuthIds.includes(String(auth._id)));
 
             setAuthorizations(pendingAuths);
-        } catch (err) {
-            console.error(err);
-            Alert.alert('Erro', 'Falha ao carregar autorizações');
+        } catch (error) {
+            console.error(error);
+            Alert.alert('Erro', error.toString());
         } finally {
             setLoading(false);
         }
@@ -59,16 +56,12 @@ export default function AuthorizationScreen({ navigation }) {
                     onPress: async () => {
                         try {
                             setLoading(true);
-                            await api.delete(`/authorizations/${id}`);
+                            await AuthorizationService.deleteAuthorization(id);
                             Alert.alert('Sucesso', 'Autorização excluída com sucesso');
                             loadAuthorizations();
-                        } catch (err) {
-                            console.error(err);
-                            if (err.response && err.response.data && err.response.data.error) {
-                                Alert.alert('Erro', err.response.data.error);
-                            } else {
-                                Alert.alert('Erro', 'Falha ao excluir autorização');
-                            }
+                        } catch (error) {
+                            console.error(error);
+                            Alert.alert('Erro', error.toString());
                         } finally {
                             setLoading(false);
                         }

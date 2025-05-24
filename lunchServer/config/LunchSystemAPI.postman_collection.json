@@ -1,164 +1,214 @@
 {
 	"info": {
 		"_postman_id": "883314af-5384-4ddd-9be6-2e002f38726c",
-		"name": "Lunch System API Copy",
-		"description": "Coleção de testes para a API de controle de lanches escolares.",
+		"name": "Lunch System API",
+		"description": "API de controle de lanches escolares com autorizações e entregas.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
 		"_exporter_id": "34247449"
 	},
 	"item": [
 		{
-			"name": "Criar Aluno",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"studentRA\": \"12345\",\n    \"nome\": \"João da Silva\",\n    \"photoUrl\": \"https://exemplo.com/foto.jpg\"\n}"
+			"name": "Students",
+			"item": [
+				{
+					"name": "Criar Aluno",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"studentRA\": \"12345\",\n    \"nome\": \"João da Silva\",\n    \"photoUrl\": \"base64_encoded_image_data\"\n}"
+						},
+						"url": "localhost:3000/students",
+						"description": "Cria um novo aluno com RA, nome e foto em base64"
+					},
+					"response": []
 				},
-				"url": "localhost:3000/students"
-			},
-			"response": []
-		},
-		{
-			"name": "Criar Autorização de Lanche",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"studentRA\": \"12345\",\n    \"dataLiberation\": \"2025-05-03\",\n    \"qtdLunches\": 2\n}"
+				{
+					"name": "Buscar Todos os Alunos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "localhost:3000/students",
+						"description": "Retorna a lista de todos os alunos cadastrados"
+					},
+					"response": []
 				},
-				"url": "localhost:3000/authorizations"
-			},
-			"response": []
-		},
-		{
-			"name": "Criar Entrega de Lanche",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"authId\": \"ID_DA_AUTORIZACAO\",\n    \"studentRA\": \"12345\",\n    \"deliveryDate\": \"2025-05-03\"\n}"
+				{
+					"name": "Buscar Aluno por RA",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "localhost:3000/students/12345",
+						"description": "Busca um aluno específico pelo seu RA"
+					},
+					"response": []
 				},
-				"url": "localhost:3000/deliveries"
-			},
-			"response": []
-		},
-		{
-			"name": "Buscar Todos os Alunos",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": "localhost:3000/students"
-			},
-			"response": []
-		},
-		{
-			"name": "Buscar Entregas por Data",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": "localhost:3000/deliveries/date/2025-05-03"
-			},
-			"response": []
-		},
-		{
-			"name": "Buscar Aluno por RA",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": "localhost:3000/students/12345"
-			},
-			"response": []
-		},
-		{
-			"name": "Buscar Autorizações por Data",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": "localhost:3000/authorizations/date/2025-05-03"
-			},
-			"response": []
-		},
-		{
-			"name": "Buscar Autorização por ID",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": "localhost:3000/authorizations/12345"
-			},
-			"response": []
-		},
-		{
-			"name": "Atualizar Aluno por RA",
-			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"nome\": \"João da Silva Alterado\",\n    \"photoUrl\": \"https://exemplo.com/foto-alterada.jpg\"\n}"
+				{
+					"name": "Atualizar Aluno por RA",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"João da Silva Alterado\",\n    \"photoUrl\": \"base64_encoded_image_data\"\n}"
+						},
+						"url": "localhost:3000/students/12345",
+						"description": "Atualiza os dados de um aluno existente"
+					},
+					"response": []
 				},
-				"url": "localhost:3000/students/12345"
-			},
-			"response": []
+				{
+					"name": "Excluir Aluno por RA",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "localhost:3000/students/12345",
+						"description": "Remove um aluno do sistema"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints relacionados ao gerenciamento de alunos"
 		},
 		{
-			"name": "Atualizar Autorização de Lanche por ID",
-			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"dataLiberation\": \"2025-05-04\",\n    \"qtdLunches\": 3\n}"
+			"name": "Authorizations",
+			"item": [
+				{
+					"name": "Criar Autorização de Lanche",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"studentRA\": \"12345\",\n    \"dataLiberation\": \"2024-03-20\",\n    \"qtdLunches\": 2\n}"
+						},
+						"url": "localhost:3000/authorizations",
+						"description": "Cria uma nova autorização de lanche para um aluno"
+					},
+					"response": []
 				},
-				"url": "localhost:3000/authorizations/12345"
-			},
-			"response": []
+				{
+					"name": "Buscar Autorizações por Data",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "localhost:3000/authorizations/date/2024-03-20",
+						"description": "Lista todas as autorizações para uma data específica"
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar Autorização por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "localhost:3000/authorizations/65f0c1234567890123456789",
+						"description": "Busca uma autorização específica pelo seu ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar Autorizações Disponíveis por Data",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "localhost:3000/authorizations/available/2024-03-20",
+						"description": "Lista as autorizações disponíveis (não utilizadas) para uma data específica"
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Autorização por ID",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"dataLiberation\": \"2024-03-21\",\n    \"qtdLunches\": 3\n}"
+						},
+						"url": "localhost:3000/authorizations/65f0c1234567890123456789",
+						"description": "Atualiza uma autorização existente"
+					},
+					"response": []
+				},
+				{
+					"name": "Excluir Autorização por ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "localhost:3000/authorizations/65f0c1234567890123456789",
+						"description": "Remove uma autorização do sistema"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints relacionados ao gerenciamento de autorizações de lanche"
 		},
 		{
-			"name": "Excluir Aluno por RA",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"url": "localhost:3000/students/12345"
-			},
-			"response": []
-		},
-		{
-			"name": "Excluir Autorização de Lanche por ID",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"url": "localhost:3000/authorizations/12345"
-			},
-			"response": []
+			"name": "Deliveries",
+			"item": [
+				{
+					"name": "Criar Entrega de Lanche",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"authId\": \"65f0c1234567890123456789\",\n    \"studentRA\": \"12345\",\n    \"deliveryDate\": \"2024-03-20\"\n}"
+						},
+						"url": "localhost:3000/deliveries",
+						"description": "Registra uma nova entrega de lanche"
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar Entregas por Data",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "localhost:3000/deliveries/date/2024-03-20",
+						"description": "Lista todas as entregas realizadas em uma data específica"
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar Resumo de Entregas por Data",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "localhost:3000/deliveries/summary/2024-03-20",
+						"description": "Retorna um resumo das entregas do dia, incluindo total de autorizações, entregas realizadas e taxa de conclusão"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints relacionados ao gerenciamento de entregas de lanche"
 		}
 	]
 }

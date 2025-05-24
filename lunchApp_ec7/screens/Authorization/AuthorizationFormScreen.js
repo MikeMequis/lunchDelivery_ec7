@@ -8,14 +8,15 @@ import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Ionicons } from '@expo/vector-icons';
 import { format } from 'date-fns';
-import api from '../../services/api';
+import AuthorizationService from '../../services/AuthorizationService';
+import StudentService from '../../services/StudentService';
 
 export default function AuthorizationFormScreen({ route, navigation }) {
     const [students, setStudents] = useState([]);
     const [studentRA, setStudentRA] = useState('');
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [dataLiberation, setDataLiberation] = useState(new Date());
-    const [qtdLunches, setqtdLunches] = useState('1');
+    const [qtdLunches, setQtdLunches] = useState('1');
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [loading, setLoading] = useState(false);
     const [fetching, setFetching] = useState(true);
@@ -25,21 +26,21 @@ export default function AuthorizationFormScreen({ route, navigation }) {
     useEffect(() => {
         const loadInitialData = async () => {
             try {
-                const { data } = await api.get('/students');
+                const data = await StudentService.getAllStudents();
                 setStudents(data);
 
                 if (isEditing) {
                     const auth = route.params.authorization;
                     setStudentRA(auth.studentRA);
                     setDataLiberation(new Date(auth.dataLiberation));
-                    setqtdLunches(auth.qtdLunches.toString());
+                    setQtdLunches(auth.qtdLunches.toString());
 
                     const selected = data.find(s => s.studentRA === auth.studentRA);
                     setSelectedStudent(selected || null);
                 }
-            } catch (err) {
-                console.error(err);
-                Alert.alert('Erro', 'Erro ao carregar alunos');
+            } catch (error) {
+                console.error('Error loading students:', error);
+                Alert.alert('Erro', error);
             } finally {
                 setFetching(false);
             }
@@ -47,6 +48,12 @@ export default function AuthorizationFormScreen({ route, navigation }) {
 
         loadInitialData();
     }, []);
+
+    const handleStudentChange = (studentRA) => {
+        setStudentRA(studentRA);
+        const student = students.find(s => s.studentRA === studentRA);
+        setSelectedStudent(student || null);
+    };
 
     const handleSubmit = async () => {
         if (!studentRA) return Alert.alert('Erro', 'Selecione um aluno');
@@ -58,38 +65,27 @@ export default function AuthorizationFormScreen({ route, navigation }) {
 
         const payload = {
             studentRA,
-            dataLiberation: format(dataLiberation, 'yyyy-MM-dd'),
+            dataLiberation,
             qtdLunches: parseInt(qtdLunches, 10)
-          };
+        };
         
-          try {
+        try {
             setLoading(true);
             if (isEditing) {
-                await api.put("/authorizations/${id}", payload);
-                Alert.alert('Sucesso', 'Autorização atualizada');
+                await AuthorizationService.updateAuthorization(route.params.authorization._id, payload);
+                Alert.alert('Sucesso', 'Autorização atualizada com sucesso');
             } else {
-                await api.post('/authorizations', payload);
-                Alert.alert('Sucesso', 'Autorização cadastrada');
+                await AuthorizationService.createAuthorization(payload);
+                Alert.alert('Sucesso', 'Autorização cadastrada com sucesso');
             }
             navigation.goBack();
-        } catch (err) {
-            console.error(err);
-            if (err.response && err.response.data && err.response.data.error) {
-                Alert.alert('Erro', err.response.data.error);
-            } else {
-                Alert.alert('Erro', 'Erro ao salvar autorização');
-            }
+        } catch (error) {
+            console.error('Error saving authorization:', error);
+            Alert.alert('Erro', error);
         } finally {
             setLoading(false);
         }
     };
-
-    const handleStudentChange = (studentRA) => {
-        setStudentRA(studentRA);
-        const student = students.find(s => s.studentRA === studentRA);
-        setSelectedStudent(student || null);
-    };
-
 
     return (
         <ScrollView style={styles.container}>
@@ -149,7 +145,7 @@ export default function AuthorizationFormScreen({ route, navigation }) {
                 <View style={styles.pickerContainer}>
                     <Picker
                         selectedValue={qtdLunches}
-                        onValueChange={setqtdLunches}
+                        onValueChange={setQtdLunches}
                     >
                         <Picker.Item label="1 lanche" value="1" />
                         <Picker.Item label="2 lanches" value="2" />
