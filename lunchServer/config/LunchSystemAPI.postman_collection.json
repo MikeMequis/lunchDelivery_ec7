@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "883314af-5384-4ddd-9be6-2e002f38726c",
+		"_postman_id": "0a032957-36aa-4498-afcd-f3193b5cd0ce",
 		"name": "Lunch System API",
 		"description": "API de controle de lanches escolares com autorizações e entregas.",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "34247449"
 	},
 	"item": [
@@ -22,9 +22,23 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"studentRA\": \"12345\",\n    \"nome\": \"João da Silva\",\n    \"photoUrl\": \"base64_encoded_image_data\"\n}"
+							"raw": "{\n    \"studentRA\": \"12345\",\n    \"nome\": \"João da Silva\",\n    \"photoUrl\": \"base64_encoded_image_data\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
-						"url": "localhost:3000/students",
+						"url": {
+							"raw": "localhost:3000/students",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"students"
+							]
+						},
 						"description": "Cria um novo aluno com RA, nome e foto em base64"
 					},
 					"response": []
@@ -34,7 +48,16 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "localhost:3000/students",
+						"url": {
+							"raw": "localhost:3000/students",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"students"
+							]
+						},
 						"description": "Retorna a lista de todos os alunos cadastrados"
 					},
 					"response": []
@@ -44,7 +67,17 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "localhost:3000/students/12345",
+						"url": {
+							"raw": "localhost:3000/students/12345",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"students",
+								"12345"
+							]
+						},
 						"description": "Busca um aluno específico pelo seu RA"
 					},
 					"response": []
@@ -61,9 +94,24 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nome\": \"João da Silva Alterado\",\n    \"photoUrl\": \"base64_encoded_image_data\"\n}"
+							"raw": "{\n    \"studentRA\": \"12345\",\n    \"nome\": \"João da Silva Alterado\",\n    \"photoUrl\": \"base64_encoded_image_data\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
-						"url": "localhost:3000/students/12345",
+						"url": {
+							"raw": "localhost:3000/students/12345",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"students",
+								"12345"
+							]
+						},
 						"description": "Atualiza os dados de um aluno existente"
 					},
 					"response": []
@@ -73,7 +121,17 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"url": "localhost:3000/students/12345",
+						"url": {
+							"raw": "localhost:3000/students/12345",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"students",
+								"12345"
+							]
+						},
 						"description": "Remove um aluno do sistema"
 					},
 					"response": []
@@ -98,7 +156,16 @@
 							"mode": "raw",
 							"raw": "{\n    \"studentRA\": \"12345\",\n    \"dataLiberation\": \"2024-03-20\",\n    \"qtdLunches\": 2\n}"
 						},
-						"url": "localhost:3000/authorizations",
+						"url": {
+							"raw": "localhost:3000/authorizations",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"authorizations"
+							]
+						},
 						"description": "Cria uma nova autorização de lanche para um aluno"
 					},
 					"response": []
@@ -108,7 +175,18 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "localhost:3000/authorizations/date/2024-03-20",
+						"url": {
+							"raw": "localhost:3000/authorizations/date/2024-03-20",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"authorizations",
+								"date",
+								"2024-03-20"
+							]
+						},
 						"description": "Lista todas as autorizações para uma data específica"
 					},
 					"response": []
@@ -118,18 +196,18 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "localhost:3000/authorizations/65f0c1234567890123456789",
+						"url": {
+							"raw": "localhost:3000/authorizations/6832199e0fafe42568093e7b",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"authorizations",
+								"6832199e0fafe42568093e7b"
+							]
+						},
 						"description": "Busca uma autorização específica pelo seu ID"
-					},
-					"response": []
-				},
-				{
-					"name": "Buscar Autorizações Disponíveis por Data",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": "localhost:3000/authorizations/available/2024-03-20",
-						"description": "Lista as autorizações disponíveis (não utilizadas) para uma data específica"
 					},
 					"response": []
 				},
@@ -145,9 +223,24 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"dataLiberation\": \"2024-03-21\",\n    \"qtdLunches\": 3\n}"
+							"raw": "{\n    \"studentRA\": \"12345\",\n    \"dataLiberation\": \"2024-03-21\",\n    \"qtdLunches\": 3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
-						"url": "localhost:3000/authorizations/65f0c1234567890123456789",
+						"url": {
+							"raw": "localhost:3000/authorizations/6832199e0fafe42568093e7b",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"authorizations",
+								"6832199e0fafe42568093e7b"
+							]
+						},
 						"description": "Atualiza uma autorização existente"
 					},
 					"response": []
@@ -157,7 +250,17 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"url": "localhost:3000/authorizations/65f0c1234567890123456789",
+						"url": {
+							"raw": "localhost:3000/authorizations/6832199e0fafe42568093e7b",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"authorizations",
+								"6832199e0fafe42568093e7b"
+							]
+						},
 						"description": "Remove uma autorização do sistema"
 					},
 					"response": []
@@ -182,7 +285,16 @@
 							"mode": "raw",
 							"raw": "{\n    \"authId\": \"65f0c1234567890123456789\",\n    \"studentRA\": \"12345\",\n    \"deliveryDate\": \"2024-03-20\"\n}"
 						},
-						"url": "localhost:3000/deliveries",
+						"url": {
+							"raw": "localhost:3000/deliveries",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"deliveries"
+							]
+						},
 						"description": "Registra uma nova entrega de lanche"
 					},
 					"response": []
@@ -192,18 +304,19 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "localhost:3000/deliveries/date/2024-03-20",
+						"url": {
+							"raw": "localhost:3000/deliveries/date/2024-03-20",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"deliveries",
+								"date",
+								"2024-03-20"
+							]
+						},
 						"description": "Lista todas as entregas realizadas em uma data específica"
-					},
-					"response": []
-				},
-				{
-					"name": "Buscar Resumo de Entregas por Data",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": "localhost:3000/deliveries/summary/2024-03-20",
-						"description": "Retorna um resumo das entregas do dia, incluindo total de autorizações, entregas realizadas e taxa de conclusão"
 					},
 					"response": []
 				}
